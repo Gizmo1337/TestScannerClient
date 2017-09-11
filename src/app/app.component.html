@@ -1,10 +1,27 @@
+<md-toolbar color="primary">
+  <md-icon mdTooltip="User Verified" class="UserOk">verified_user</md-icon>
+  <span>BarGen</span>
+  <span class="example-spacer"></span>
+  <button md-button [mdMenuTriggerFor]="appMenu"><md-icon>menu</md-icon> Menu</button>
+  
+</md-toolbar>
+
+<md-menu #appMenu="mdMenu">
+<button md-menu-item> Settings </button>
+<button md-menu-item> Help </button>
 
 
-<hot-table height="250" [colWidths]="true" [colHeaders]="true" [data]="data">
+
+</md-menu>
+ 
+
+<h3>How to use me</h3>
+<hot-table [settings]="settings" height="450" >
 
   <hot-column title= "Bar Code" width="200"></hot-column>
   <hot-column title= "Time Stamp" width= "100"type="date"></hot-column>
-  <hot-column title= "Symbology" width="100" type="numeric"></hot-column>
+  <hot-column title= "Symbology" width="100" type="text"></hot-column>
   <hot-column title= "Ok" [readOnly]="true"></hot-column>
  
 </hot-table>
+<button md-raised-button color="primary">Send</button>

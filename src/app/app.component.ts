@@ -6,17 +6,24 @@ import Handsontable from 'handsontable';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'app';
-  data: any[];
-  columns: object[] = [
-    {data: 'id', title: 'Id'},
-    {data: 'airdate', title: 'AirDate'},
-    {data: 'airtime', title: 'AirTime'},
-    {data: 'name', title: 'Name', width: 200},
-    {data: 'number', title: 'Number'},
-    {data: 'runtime', title: 'Runtime'},
-    {data: 'season', title: 'Season'},
-    {data: 'summary', title: 'Summary', renderer: 'html', width: 800},
-  ];
- 
+  settings = {
+
+    comments: true,
+    cell: [
+      { row: 0, col: 0, comment: { value: 'Bar code example: 9200000000005 ' } },
+      { row: 0, col: 1, comment: { value: 'Timestamp example: 04:00:38 PM 09/08/11 ' } },
+      { row: 0, col: 2, comment: { value: 'Symbology example: EAN-13 ' } }
+    ],
+    columns: [{
+      type: 'date',
+      defaultData: '2015-02-02',
+      dateFormat: 'DD-MM-YYYY',
+      correctFormat: true,
+
+    }],
+    colHeaders: true,
+    rowHeaders: true,
+    startRows:20
+  }
+
 }
