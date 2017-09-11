@@ -9,3 +9,8 @@
   .example-spacer {
     flex: 1 1 auto;
   }
+
+.underTable  {
+   
+    margin-top: 0.3em !important;  
+}

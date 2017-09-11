@@ -7,12 +7,16 @@ import { HttpModule } from '@angular/http';
 import { FormsModule } from '@angular/forms'
 import {MdTooltipModule} from '@angular/material';
 import { HotTableModule } from 'angular-handsontable/index';
+import {MdDialogModule} from '@angular/material';
+
 
 @NgModule({
   declarations: [
+    
     AppComponent
   ],
   imports: [
+    MdDialogModule,
     MdTooltipModule,
     BrowserModule,
     HotTableModule,

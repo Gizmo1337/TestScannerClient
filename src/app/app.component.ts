@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import Handsontable from 'handsontable';
+import {MdDialog} from '@angular/material';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
