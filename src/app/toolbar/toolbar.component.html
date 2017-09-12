@@ -1,0 +1,34 @@
+<!-- Primary toolbar -->
+<md-toolbar color="primary">
+    <md-icon mdTooltip="User Verified" class="UserOk">verified_user</md-icon>
+    <!-- Primary tab spans -->
+    <span>BarGen</span>
+    <span class="example-spacer"></span>
+    <md-select placeholder="Dunamis URL Page">
+        <md-option *ngFor="let food of foods" [value]="food.value">
+          {{ food.viewValue }}
+        </md-option>
+      </md-select>
+      <span class="example-spacer"></span>
+      <md-select placeholder="GFK Server">
+          <md-option *ngFor="let food of foods" [value]="food.value">
+            {{ food.viewValue }}
+          </md-option>
+        </md-select>
+  
+        <span class="example-spacer"></span>
+        <md-select placeholder="Dunamis URL Page">
+            <md-option *ngFor="let food of foods" [value]="food.value">
+              {{ food.viewValue }}
+            </md-option>
+          </md-select>
+    <span class="example-spacer"></span>
+    <span>0000000000000000</span>
+  
+    <button md-button [mdMenuTriggerFor]="appMenu"><md-icon>menu</md-icon> Menu</button>
+  </md-toolbar>
+  
+  <md-menu #appMenu="mdMenu">
+    <button md-menu-item> Settings </button>
+    <button md-menu-item> Help </button>
+  </md-menu>
