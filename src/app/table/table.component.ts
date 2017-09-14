@@ -1,12 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { HotRegisterer } from 'angular-handsontable';
+import { HotRegisterer } from 'angular-handsontable/index';
 @Component({
   selector: 'app-table',
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.css']
 })
 export class TableComponent implements OnInit {
-
+  instance: string = "hotInstance";
+  coordX: string;
+  coordY: string;
+  newValue: string;
   data: any[];
   settings = {
     comments: true,
@@ -25,19 +28,15 @@ export class TableComponent implements OnInit {
     rowHeaders: true,
     startRows: 20,
     rowHeights: "23px"
-  
-    
   }
-
- 
-
-
-
-  constructor() { 
-    var  tmpData = JSON.parse(JSON.stringify('BarCode'));  
-  }
-  ngOnInit() {
-
-  }
-
+  constructor(private _hotRegisterer: HotRegisterer) {}
+   
+    getData() {
+      var hot_instance = this._hotRegisterer.getInstance(this.instance); 
+      var data = hot_instance.getData();
+      console.log('working...get data');
+      console.log('data: ', data);
+   
+}
+ngOnInit() {}
 }

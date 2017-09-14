@@ -2,15 +2,15 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MdTabsModule, MdButtonModule, MdCardModule, MdMenuModule, MdToolbarModule, MdIconModule, MdGridListModule,MdDialogModule,MdTooltipModule } from '@angular/material';
-import { AppComponent } from './app.component';
 import { HttpModule } from '@angular/http';
 import { FormsModule } from '@angular/forms'
+import { AppComponent } from './app.component';
 import { HotTableModule } from 'angular-handsontable/index';
 import {MdSelectModule} from '@angular/material';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { TableComponent } from './table/table.component';
 import { ToolbarElementsComponent } from './toolbar-elements/toolbar-elements.component';
-import { HotRegisterer } from 'angular-handsontable/index';
+
 
 @NgModule({
   declarations: [
@@ -20,14 +20,13 @@ import { HotRegisterer } from 'angular-handsontable/index';
     ToolbarElementsComponent
   ],
   imports: [
-    HotRegisterer,
+    BrowserModule,
     MdSelectModule,
     MdTabsModule,
     MdGridListModule,
     MdDialogModule,
-    MdTooltipModule,
-    BrowserModule,
     FormsModule,
+    MdTooltipModule,
     HotTableModule,
     HttpModule,
     BrowserAnimationsModule,
@@ -41,5 +40,6 @@ import { HotRegisterer } from 'angular-handsontable/index';
   bootstrap: [AppComponent]
 })
 export class AppModule { 
+  
 
 }
