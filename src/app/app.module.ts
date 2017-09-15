@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MdTabsModule, MdButtonModule, MdCardModule, MdMenuModule, MdToolbarModule, MdIconModule, MdGridListModule,MdDialogModule,MdTooltipModule } from '@angular/material';
+import {MdSidenavModule, MdTabsModule, MdButtonModule, MdCardModule, MdMenuModule, MdToolbarModule, MdIconModule, MdGridListModule,MdDialogModule,MdTooltipModule } from '@angular/material';
 import { HttpModule } from '@angular/http';
 import { FormsModule } from '@angular/forms'
 import { AppComponent } from './app.component';
@@ -10,6 +10,7 @@ import {MdSelectModule} from '@angular/material';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { TableComponent } from './table/table.component';
 import { ToolbarElementsComponent } from './toolbar-elements/toolbar-elements.component';
+import { SendOptionsComponent } from './send-options/send-options.component';
 
 
 @NgModule({
@@ -17,9 +18,11 @@ import { ToolbarElementsComponent } from './toolbar-elements/toolbar-elements.co
     AppComponent,
     ToolbarComponent,
     TableComponent,
-    ToolbarElementsComponent
+    ToolbarElementsComponent,
+    SendOptionsComponent
   ],
   imports: [
+    MdSidenavModule,
     BrowserModule,
     MdSelectModule,
     MdTabsModule,

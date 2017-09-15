@@ -1,0 +1,17 @@
+
+    <md-select overlayDir required placeholder="Dunamis URL Page (this should be clickerload)"  class="menubutton" [(ngModel)]="selectedValue" >
+        
+                <md-option *ngFor="let DunamisUrlPage of DunamisUrlPages" [value]="DunamisUrlPage.value">
+                  {{ DunamisUrlPage.viewValue }}
+                </md-option>
+              </md-select>
+              <br>
+              <br>
+              
+              <md-select placeholder="GFK Server" item-width="40%" width='300px' >
+                  <md-option *ngFor="let food of GFK_Server" [value]="food.value">
+                    {{ food.viewValue }}
+                  </md-option>
+                </md-select>
+          
+                <span class="example-spacer"></span>

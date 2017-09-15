@@ -3,7 +3,7 @@
 <!-- Secondary TABS -->
 <md-tab-group>
   <md-tab label="Main App">
-    <h3>Some stuff</h3>
+    <h3>Export Table</h3>
   </md-tab>
 
   <md-tab label="Help">
@@ -13,15 +13,14 @@
       <p>Your browser does not support iframes.</p>
     </iframe>
   </md-tab>
+
 </md-tab-group>
 
-
-  <md-card><app-table></app-table></md-card>
-
-  <!-- <input placeholder="Column" type="number" min="0" (input)="selectCell($event)" [(ngModel)]="coordX">
-  <input placeholder="Row" type="number" min="0" (input)="selectCell($event)" [(ngModel)]="coordY">
-  <input placeholder="Set new value" (input)="changeValue($event)" [(ngModel)]="newValue">
-  
-  <hot-table [colHeaders]="true" [rowHeaders]="true" [outsideClickDeselects]="false" hotId="hotInstance"></hot-table>
-  <button md-raised-button color="primary" ></button>
-  <button md-button (click)="getData()" >Click me!</button> -->
+<div class="container">
+<md-card class="table-card">
+    <app-table></app-table>
+</md-card>
+<md-card class="table-card2">
+<app-send-options> </app-send-options>
+  </md-card>
+</div>
