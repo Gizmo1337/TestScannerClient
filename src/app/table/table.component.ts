@@ -1,17 +1,33 @@
 import { Component, OnInit } from '@angular/core';
 import { HotRegisterer } from 'angular-handsontable/index';
-
+import { DataService } from '../data.service'
 @Component({
   selector: 'app-table',
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.css']
 })
 export class TableComponent implements OnInit {
+  server: string = "";
+  urlConcat: string = "http://ecpo-descan-preprod.gfk.com/dynaload_extrec.aspx?pageid=clickerload"
+  //
+  //dynaLoad.aspx?pageid=clickerlogin&deviceid=
+  //
+
+
+  //variable for table data-manipulation
+  ScannerId: object;
   instance: string = "hotInstance";
   coordX: string;
   coordY: string;
-  newValue: string;
   data: any[];
+  //variables for progress bar
+  color = 'accent';
+  mode = 'buffer';
+  progressValue: number = 0;
+  bufferValue = 0;
+
+
+
   settings = {
     comments: true,
     cell: [
@@ -32,36 +48,16 @@ export class TableComponent implements OnInit {
     startRows: 20,
     rowHeights: "23px"
   }
-  constructor(private _hotRegisterer: HotRegisterer) { }
-  // where length is 3 -> add to special array.
+  constructor(private _hotRegisterer: HotRegisterer, private DataService: DataService) { }
+
+  // this will get all data in table and build a xml with ECPO 4 standards.
+
   getData() {
+    var ScannerID: any = this.DataService.transferdata();
+    ScannerID = ScannerID.scannerId;
     var hot_instance = this._hotRegisterer.getInstance(this.instance);
     var data = hot_instance.getData();
-    var reData = new Array(new Array);
-    console.log('working...get data');
-
-    console.log(data.length);
-    for (var i = 0; i < data.length; i++) {
-      for (var j = 0; j <= 2; j++) {
-        if (data[i][j] !== null && data[i] !== undefined) {
-          reData[i] = data[i];
-
-          //console.log ('value for data I:' + i + 'j:' + j)
-        }
-        //else {console.log(data[i][j])        
-      }
-    }
-    //   for(var i = 0; i < data.length; i++) {
-    //     if(!reData[i]) {
-    //       console.log("taie !")
-    //       reData.splice(i,1);
-    //     }
-    //   }
-    console.log("redata: ", reData)
-    console.log('data: ', data);
-    //  console.log(reData[0][0])
-    //  console.log(reData[1])
-    //  console.log(reData[3])
+    // console.log('working...get data');
     var BarCodes = new Array();
     var TimeStamp = new Array();
     var Symbology = new Array();
@@ -73,43 +69,136 @@ export class TableComponent implements OnInit {
       }
     }
     var header =
-      "<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>\n <gfk_envelope> \"\n  <header sw=\"CSA_2\" sw_ver=\"3.4.0\" scanner_sw=\"RBBV0147\" scanner_os=\"\" os_version=\"Windows 7 Professional Service Pack 1\" loaddll_version=\"1.0.20.0\">\n    <connection type=\"1\"/> \n  </header>\n  <body>\n    <codes deviceid=\"000000000P602395\" device=\"0\">"
+      "<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>\n <gfk_envelope> \"\n  <header sw=\"CSA_2\" sw_ver=\"3.4.0\" scanner_sw=\"RBBV0147\" scanner_os=\"\" os_version=\"Windows 7 Professional Service Pack 1\" loaddll_version=\"1.0.20.0\">\n    <connection type=\"1\"/> \n  </header>\n  <body>\n    <codes deviceid=\"" + ScannerID + "\" device=\"0\">"
     var content =
       "\n    <item barcode=\"Sa9999\" timestamp=\"10:36:26 AM 09/13/17\" symbology=\"Code 128\"/>"
     var footer =
       "\n    </codes>\n  </body>\n</gfk_envelope>"
 
-
     for (var i = 0; i < BarCodes.length; i++) {
       content += "\n    <item barcode=\"" + BarCodes[i] + "\" timestamp=\"12:00:00 AM " + TimeStamp[i] + "\" symbology=\"" + Symbology[i] + "\"/>"
     }
-
     var result = header + content + footer;
 
+    sessionStorage.setItem("result", result);
+    sessionStorage.setItem("urlConcat", this.urlConcat);
 
-    var lil = "<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>\r\n<gfk_envelope>\r\n  <header sw=\"CSA_2\" sw_ver=\"3.4.0\" scanner_sw=\"RBBV0147\" scanner_os=\"\" os_version=\"Windows 7 Professional Service Pack 1\" loaddll_version=\"1.0.20.0\">\r\n    <connection type=\"1\"/>\r\n  </header>\r\n  <body>\r\n    <codes deviceid=\"000000000P602395\" device=\"0\">\r\n      <item barcode=\"Sa9999\" timestamp=\"15:31:26 AM 09/14/17\" symbology=\"Code 128\"/>\r\n      <item barcode=\"victor\" timestamp=\"10:36:28 AM 09/13/17\" symbology=\"Code 128\"/> \r\n       <item barcode=\"cristi\" timestamp=\"10:36:28 AM 09/13/17\" symbology=\"Code 128\"/> \r\n    </codes>\r\n  </body>\r\n</gfk_envelope>\r\n";
-    
-    var xhr = new XMLHttpRequest();
-    xhr.withCredentials = true;
-    
-    xhr.addEventListener("readystatechange", function () {
-      if (this.readyState === 4) {
-        console.log(this.responseText);
-      }
-    });
-    
-    xhr.open("POST", "http://ecpo-descan-preprod.gfk.com/dynaload_extrec.aspx?pageid=clickerload");
-    xhr.setRequestHeader("content-type", "application/xml");
-    xhr.setRequestHeader("authorization", "Basic dnJjaGVyOnZyY2hlcnBzdw==");
-    xhr.setRequestHeader("cache-control", "no-cache");
-    xhr.setRequestHeader("postman-token", "28cb47ed-8c64-d954-3ddf-8a3329a15359");
-    
-    xhr.send(result);
+    // var fullExample = "<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>\r\n<gfk_envelope>\r\n  <header sw=\"CSA_2\" sw_ver=\"3.4.0\" scanner_sw=\"RBBV0147\" scanner_os=\"\" os_version=\"Windows 7 Professional Service Pack 1\" loaddll_version=\"1.0.20.0\">\r\n    <connection type=\"1\"/>\r\n  </header>\r\n  <body>\r\n    <codes deviceid=\"000000000P602395\" device=\"0\">\r\n      <item barcode=\"Sa9999\" timestamp=\"15:31:26 AM 09/14/17\" symbology=\"Code 128\"/>\r\n      <item barcode=\"victor\" timestamp=\"10:36:28 AM 09/13/17\" symbology=\"Code 128\"/> \r\n       <item barcode=\"cristi\" timestamp=\"10:36:28 AM 09/13/17\" symbology=\"Code 128\"/> \r\n    </codes>\r\n  </body>\r\n</gfk_envelope>\r\n";
 
-    console.log(result);
-    console.log(BarCodes);
-    console.log(TimeStamp);
-    console.log(Symbology);
+
+    // This will work from chrome without security
+    //   var xhr = new XMLHttpRequest();
+    //   xhr.withCredentials = false;
+    //   xhr.addEventListener("readystatechange", function () {
+    //     if (this.readyState === 4) {
+    //       console.log(this.responseText);
+    //     }
+    //   });
+
+    //   xhr.open("POST", "http://ecpo-descan.gfk.com/dynaload_extrec.aspx?pageid=clickerload");
+    //   xhr.setRequestHeader("content-type", "application/xml");
+    //   xhr.setRequestHeader("Accept","text");
+    //   xhr.setRequestHeader("Access-Control-Allow-Credentials","true");
+    //   xhr.setRequestHeader("cache-control", "no-cache");
+    //   xhr.setRequestHeader("postman-token", "28cb47ed-8c64-d954-3ddf-8a3329a15359");
+    //   xhr.send(result);
+    //   console.log(result);
+    // console.log(BarCodes);
+    // console.log(TimeStamp);
+    // console.log(Symbology);
+
   }
-  ngOnInit() { }
+  // this will send the xml to the ECPO data base using an API -> uncommented way.
+  postit() {
+    var cors_api_url = 'https://cors-anywhere.herokuapp.com/';
+    function doCORSRequest(options, printResult) {
+      var x = new XMLHttpRequest();
+      x.open(options.method, cors_api_url + options.url);
+      x.onload = x.onerror = function () {
+        printResult(
+          options.method + ' ' + options.url + '\n' +
+          x.status + ' ' + x.statusText + '\n\n' +
+          (x.responseText || '')
+        );
+      };
+      if (/^POST/i.test(options.method)) {
+        x.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+      }
+      x.send(options.data);
+    }
+    // Bind event
+    (function () {
+
+      // var outputField = document.getElementById('output');
+      // document.getElementById('post').onclick = function(e) {
+      console.log(sessionStorage.getItem("urlConcat"))
+      console.log(sessionStorage.getItem("result"))
+      // e.preventDefault();
+
+      doCORSRequest({
+        method: 'POST',
+        url: sessionStorage.getItem("urlConcat"),
+        data: sessionStorage.getItem("result")
+        //   url:"http://ecpo-descan-preprod.gfk.com/dynaload_extrec.aspx?pageid=clickerload",
+        //   data: '<?xml version="1.0" encoding="iso-8859-1"?>\
+        //   <gfk_envelope> "\
+        //    <header sw="CSA_2" sw_ver="3.4.0" scanner_sw="RBBV0147" scanner_os="" os_version="Windows 7 Professional Service Pack 1" loaddll_version="1.0.20.0">\
+        //    </header>\
+        //    <body>\
+        //      <codes deviceid="000000000P602395" device="0">\
+        //      <item barcode="Sa9999" timestamp="10:36:26 AM 09/13/17" symbology="Code 128"/>\
+        //      </codes>\
+        //    </body>\
+        //  </gfk_envelope>'
+      },
+        function printResult(result) {
+          console.log(result);
+        });
+
+      // };
+    })();
+    //     function loadProgress() {
+    // console.log(this.progressValue)
+    // // for (var i = 0; i<= 100; i++) 
+    // //   {
+    // //     console.log(this.progressValue);
+    // //     this.progressValue ++;
+    // //   }
+    //     }
+
+
+
+    
+    //     loadProgress();
+   
+    
+  }
+
+  // login to ECPO portal
+  
+  login() {
+    var ScannerID: any = this.DataService.transferdata();
+    ScannerID = ScannerID.scannerId;
+    console.log("ScannerId Login: ", ScannerID.scannerId);
+    var Checksum = 0;
+    for (var i = 1; i <= ScannerID.length; i++) {
+      Checksum = Checksum + (i * (ScannerID.charCodeAt(i - 1)) * (ScannerID.charCodeAt(i - 1)) * (ScannerID.charCodeAt(i - 1)));
+    }
+    Checksum = Checksum % 1000000;
+    var ChecksumStr = "000000".concat(Checksum.toString());
+    ChecksumStr = ChecksumStr.slice(ChecksumStr.length - 6);
+    var Result = ScannerID + ChecksumStr;
+    console.log(ScannerID, ChecksumStr)
+    // console.log("Checksum:" + ChecksumStr);
+    // console.log("Concatenation " + Result);
+    // console.log("Your full login served" + " http://ecpo-descan-preprod.gfk.com/dynaLoad.aspx?pageid=clickerlogin&deviceid="+ Result);
+    var win = window.open(" http://ecpo-descan-preprod.gfk.com/dynaLoad.aspx?pageid=clickerlogin&deviceid=" + Result, '_blank');
+    win.focus();
+  }
+  ngOnInit() {
+    console.log("progress")
+    console.log(this.progressValue)
+
+  }
 }
+

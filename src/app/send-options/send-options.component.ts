@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-
+import {NgForm} from '@angular/forms';
+import {DataService} from '../data.service';
 @Component({
   selector: 'app-send-options',
   templateUrl: './send-options.component.html',
@@ -7,40 +8,57 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SendOptionsComponent implements OnInit {
   DunamisUrlPages = [
-    {value: 'clickerload', viewValue: 'clickerload'},
-    {value: 'clickerlogin', viewValue: 'clickerlogin'}
+    {value: 'clickerload', viewValue: 'Send BarCodes'},
+    {value: 'clickerlogin', viewValue: 'Login to platformx'}
    
   ];
   GFK_Server = [
-    {value: 'AT-PREPROD-0', viewValue: 'ECPO-AT-PREPROD'},
-    {value: 'AT-PROD-1', viewValue: 'ECPO-AT-PROD'},
-    {value: 'AT-PREPROD-2', viewValue: 'ECPO-AT-PREPROD'},
-    {value: 'BE-PROD-3', viewValue: 'ECPO-BE-PROD'},
-    {value: 'DEFASHION-PREPROD-4', viewValue: 'ECPO-DEFASHION-PREPROD'},
-    {value: 'DEFASHION-PROD-5', viewValue: 'ECPO-DEFASHION-PROD'},
-    {value: 'DESCAN-PREPROD-6', viewValue: 'ECPO-DESCAN-PREPROD'},
-    {value: 'DESCAN-PROD-7', viewValue: 'ECPO-DESCAN-PROD'},
-    {value: 'DESCAN-PREPROD-8', viewValue: 'ECPO-DESCAN-PREPROD'},
-    {value: 'DESCAN-PROD-9', viewValue: 'ECPO-DESCAN-PROD'},
-    {value: 'DESCOPE-PREPROD-10', viewValue: 'ECPO-DESCOPE-PREPROD'},
-    {value: 'DESCOPE-PROD-11', viewValue: 'ECPO-DESCOPE-PROD'},
-    {value: 'FR-PREPROD-12' ,viewValue: 'ECPO-FR-PREPROD'},
-    {value: 'FR-PROD-13', viewValue: 'ECPO-FR-PROD'},
-    {value: 'NL-PREPROD-14', viewValue: 'ECPO-NL-PREPROD'},
-    {value: 'NL-PROD-15', viewValue: 'ECPO-NL-PROD'},
-    {value: 'RS-PREPROD-16', viewValue: 'ECPO-RS-PREPROD'},
-    {value: 'RS-PROD-17', viewValue: 'ECPO-RS-PROD'},
-    {value: 'SE-PREPROD-18', viewValue: 'ECPO-SE-PREPROD'},
+    {value: 'http://ecpo-at-preprod.gfk.com/dynaload', viewValue: 'ECPO-AT-PREPROD'},
+    {value: 'http://ecpo-at.gfk.com/dynaload', viewValue: 'ECPO-AT-PROD'},
+    {value: 'http://ecpo-be-preprod.gfk.com/dynaload', viewValue: 'ECPO-BE-PREPROD'},
+    {value: 'http://ecpo-be.gfk.com/dynaload', viewValue: 'ECPO-BE-PROD'},
+    {value: 'http://ecpo-defashion-preprod.gfk.com/dynaload', viewValue: 'ECPO-DEFASHION-PREPROD'},
+    {value: 'http://ecpo-defashion.gfk.com/dynaload', viewValue: 'ECPO-DEFASHION-PROD'},
+    {value: 'http://ecpo-descan-preprod.gfk.com/dynaload', viewValue: 'ECPO-DESCAN-PREPROD'},
+    {value: 'http://ecpo-descan.gfk.com/dynaload', viewValue: 'ECPO-DESCAN-PROD'},
+    {value: 'http://ecpo-descope-preprod.gfk.com/dynaload', viewValue: 'ECPO-DESCOPE-PREPROD'},
+    {value: 'http://ecpo-descope.gfk.com/dynaload', viewValue: 'ECPO-DESCOPE-PROD'},
+    {value: 'http://ecpo-fr-preprod.gfk.com/dynaload' ,viewValue: 'ECPO-FR-PREPROD'},
+    {value: 'http://ecpo-fr.gfk.com/dynaload', viewValue: 'ECPO-FR-PROD'},
+    {value: 'http://ecpo-nl-preprod.gfk.com/dynaload', viewValue: 'ECPO-NL-PREPROD'},
+    {value: 'http://ecpo-nl.gfk.com/dynaload', viewValue: 'ECPO-NL-PROD'},
+    {value: 'http://ecpo-rs-preprod.gfk.com/dynaload', viewValue: 'ECPO-RS-PREPROD'},
+    {value: 'http://ecpo-rs.gfk.com/dynaload', viewValue: 'ECPO-RS-PROD'},
+    {value: 'http://ecpo-se-preprod.gfk.com/dynaload', viewValue: 'ECPO-SE-PREPROD'},
   ];
-  DunamisUrl = [
-    {value: 'steak-0', viewValue: 'Steak'},
-    {value: 'pizza-1', viewValue: 'Pizza'},
-    {value: 'tacos-2', viewValue: 'Tacos'}
-  ];
-  constructor() { }
+
+
+  oninput(f: NgForm) {
+    console.log(f.value);  // { first: '', last: '' }
+    console.log(f.valid);  // false
+    this.DataService.reciveData(f.value);
+
+    console.log(this.DataService.reciveDataServers(f.value))
+  }
+
+  onSubmit(e) {
+     console.log("works");  // { first: '', last: '' }
+     console.log(e);
+    // console.log(f2.valid);  // false
+    // this.DataService.reciveData(f2.value);
+    // console.log( this.DataService.reciveDataServers(f2.value));
+  }
+
+ //scannerid:string = form.value.scannerId 
+
+ 
+  constructor(private DataService: DataService) { }
 
   ngOnInit() {
+    
   }
 
   selectedValue: string = "clickerload";
+
+
 }

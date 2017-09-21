@@ -11,8 +11,10 @@ import { ToolbarComponent } from './toolbar/toolbar.component';
 import { TableComponent } from './table/table.component';
 import { ToolbarElementsComponent } from './toolbar-elements/toolbar-elements.component';
 import { SendOptionsComponent } from './send-options/send-options.component';
-
-
+import {MdChipsModule} from '@angular/material';
+import {MdInputModule} from '@angular/material';
+import {DataService} from './data.service';
+import {MdProgressBarModule} from '@angular/material';
 @NgModule({
   declarations: [
     AppComponent,
@@ -22,6 +24,9 @@ import { SendOptionsComponent } from './send-options/send-options.component';
     SendOptionsComponent
   ],
   imports: [
+    MdProgressBarModule,
+    MdInputModule,
+    MdChipsModule,
     MdSidenavModule,
     BrowserModule,
     MdSelectModule,
@@ -39,7 +44,7 @@ import { SendOptionsComponent } from './send-options/send-options.component';
     MdToolbarModule,
     MdIconModule
   ],
-  providers: [],
+  providers: [DataService],
   bootstrap: [AppComponent]
 })
 export class AppModule { 
