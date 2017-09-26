@@ -2,15 +2,18 @@
 <!-- The Table  -->
 
 <div class="handsontable" >
-<hot-table [settings]="settings" height="450" [data]="data" hotId="hotInstance" width= 457></hot-table>
+<hot-table [settings]="settings"  width= 457 height="450" [data]="data" hotId="hotInstance"></hot-table>
 
-  <button id ="send" md-raised-button color="primary" class="underTable1" (click)="getData(); postit()" >Send BarCodes</button>
-  <button id ="login" md-raised-button color="primary" class="underTable2" (click)="login()" >Login to ECPO Portal</button>
+  <button  id ="send"  md-raised-button color="primary" class="underTable1" (click)="getData(); postit()" >Send BarCodes</button>
+  <button  id ="login" md-raised-button color="primary" class="underTable2" (click)="login()" >Login to ECPO Portal</button>
+</div>
+<div>
+  <p class="feedback" id="feedback"> </p>
   
 </div>
 
 <md-progress-bar
-class="example-margin"
+class="progress-bar"
 [color]="color"
 [mode]="mode"
 [value]="progressValue"

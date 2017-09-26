@@ -3,7 +3,7 @@
 <!-- Secondary TABS -->
 <md-tab-group>
   <md-tab label="Main App">
-    <h3>Export Table</h3>
+   
   </md-tab>
 
   <md-tab label="Help">
@@ -13,16 +13,33 @@
       <p>Your browser does not support iframes.</p>
     </iframe>
   </md-tab>
-
 </md-tab-group>
 
-<div class="container">
-<md-card class="table-card">
-    <app-table></app-table>
-</md-card>
-<md-card class="table-card2">
-<app-send-options> </app-send-options>
-  </md-card>
-  <md-card class="table-card3">
-  </md-card>
-</div>
+<div class="wrapper">
+    <div class="one"> <app-table></app-table></div>
+    <div class="two"><app-send-options class="options"> </app-send-options></div>
+    <div class="three">
+<br>
+        <md-chip-list>
+            <md-chip color="warn" selected="true">Dev. Build Info v0.09 Alpha</md-chip>
+          </md-chip-list>
+      <ol>
+        <h4>nfo:</h4>
+        <p> An application that allows you to easily send barcodes to the ECPO database for test purposes without using a scanner and
+          login to the ECPO Portal. </p>
+        <li> Type in your full ScannerID (example: "000000000Pxxxxxx")</li>
+        <li> Select the Gfk Server to work with</li>
+        <li> Add in the table your Data</li>
+        <li> Click on Send BarCodes</li>
+      </ol>
+      <ul class="roadmap">
+        <h4>RoadMap:</h4>
+        <li> + Feedback on server response</li>
+        <li> + Link DB with login nfo & history</li>
+        <li> + Create auth component & ui</li>
+        <li> + Redesign UI</li>
+        <li> + Proper title, gfk theme & logo, custom favicon</li>
+        <li> + Responsive build + force landscape for mobile.</li>
+        <li> + Http Request moved inhouse @nodejs</li>
+      </ul></div>
+  </div>

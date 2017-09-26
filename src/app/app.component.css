@@ -1,37 +1,30 @@
-.container {
+/* Styles go here */
 
-border : 2px solid #000; 
-overflow:hidden;
+.wrapper {
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  grid-gap: 10px;
+  grid-auto-rows: minmax(100px, auto);
+  border-style: ridge;
+
+}
+.one {
+  grid-column: 1  ;
+  grid-row: 1;
+
+  border-style: ridge;
+  
+}
+.two { 
+  border-style: ridge;
+  grid-column: 2 / 3;
+  grid-row: 1;
+  padding-left: 5%;
+  padding-top: 15%;
+ 
 }
 
-.container div{
-    min-height: 200px;
-    margin-bottom: 20px;
-    }
-.table-card {
-    padding: 0 !important;
-   
-    /* background-color: gray; */
-    float:left; 
-    margin-right:15px;
-  
-    width: 459px;
-    border-right:2px solid #000;
-    border-bottom: 2px solid #000;
-    
-  }
-  .table-card2 {
-    background-color: white;
-    overflow:hidden;
-    margin:10px; 
-    min-height:200px;
-    margin-left: 0%;
-    width: 50%
-  }
- .table-card3 {
-width: 50%;
-overflow: hidden;
-min-height: 200px;
-position: relative;
-
- }
+.three {
+  grid-column: 3/4;
+  grid-row: 1;
+}

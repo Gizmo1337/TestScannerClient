@@ -15,16 +15,18 @@ export class TableComponent implements OnInit {
 
 
   //variable for table data-manipulation
+  public SuccessCount: number = 0;
   ScannerId: object;
   instance: string = "hotInstance";
   coordX: string;
   coordY: string;
   data: any[];
   //variables for progress bar
-  color = 'accent';
-  mode = 'buffer';
+  color = 'primary';
+  mode = 'query';
   progressValue: number = 0;
   bufferValue = 0;
+
 
 
 
@@ -70,8 +72,8 @@ export class TableComponent implements OnInit {
     }
     var header =
       "<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>\n <gfk_envelope> \"\n  <header sw=\"CSA_2\" sw_ver=\"3.4.0\" scanner_sw=\"RBBV0147\" scanner_os=\"\" os_version=\"Windows 7 Professional Service Pack 1\" loaddll_version=\"1.0.20.0\">\n    <connection type=\"1\"/> \n  </header>\n  <body>\n    <codes deviceid=\"" + ScannerID + "\" device=\"0\">"
-    var content =
-      "\n    <item barcode=\"Sa9999\" timestamp=\"10:36:26 AM 09/13/17\" symbology=\"Code 128\"/>"
+    var content = ""
+    // "\n    <item barcode=\"Sa9999\" timestamp=\"10:36:26 AM 09/13/17\" symbology=\"Code 128\"/>"
     var footer =
       "\n    </codes>\n  </body>\n</gfk_envelope>"
 
@@ -81,7 +83,8 @@ export class TableComponent implements OnInit {
     var result = header + content + footer;
 
     sessionStorage.setItem("result", result);
-    sessionStorage.setItem("urlConcat", this.urlConcat);
+
+    //sessionStorage.setItem("urlConcat", this.urlConcat);
 
     // var fullExample = "<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>\r\n<gfk_envelope>\r\n  <header sw=\"CSA_2\" sw_ver=\"3.4.0\" scanner_sw=\"RBBV0147\" scanner_os=\"\" os_version=\"Windows 7 Professional Service Pack 1\" loaddll_version=\"1.0.20.0\">\r\n    <connection type=\"1\"/>\r\n  </header>\r\n  <body>\r\n    <codes deviceid=\"000000000P602395\" device=\"0\">\r\n      <item barcode=\"Sa9999\" timestamp=\"15:31:26 AM 09/14/17\" symbology=\"Code 128\"/>\r\n      <item barcode=\"victor\" timestamp=\"10:36:28 AM 09/13/17\" symbology=\"Code 128\"/> \r\n       <item barcode=\"cristi\" timestamp=\"10:36:28 AM 09/13/17\" symbology=\"Code 128\"/> \r\n    </codes>\r\n  </body>\r\n</gfk_envelope>\r\n";
 
@@ -106,38 +109,44 @@ export class TableComponent implements OnInit {
     // console.log(BarCodes);
     // console.log(TimeStamp);
     // console.log(Symbology);
-
   }
   // this will send the xml to the ECPO data base using an API -> uncommented way.
+
+
+
   postit() {
+    var GfkServer: any = this.DataService.transferdataServer();
     var cors_api_url = 'https://cors-anywhere.herokuapp.com/';
     function doCORSRequest(options, printResult) {
       var x = new XMLHttpRequest();
+
       x.open(options.method, cors_api_url + options.url);
       x.onload = x.onerror = function () {
         printResult(
           options.method + ' ' + options.url + '\n' +
-          x.status + ' ' + x.statusText + '\n\n' +
+          "status:" + x.status + ' ' + x.statusText + '\n\n' +
           (x.responseText || '')
         );
+
       };
       if (/^POST/i.test(options.method)) {
         x.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
       }
       x.send(options.data);
+      if (x.status == 200) {
+        console.log("EVERYTHINS IS AWESOME")
+      }
     }
     // Bind event
     (function () {
 
-      // var outputField = document.getElementById('output');
-      // document.getElementById('post').onclick = function(e) {
       console.log(sessionStorage.getItem("urlConcat"))
       console.log(sessionStorage.getItem("result"))
-      // e.preventDefault();
 
       doCORSRequest({
         method: 'POST',
-        url: sessionStorage.getItem("urlConcat"),
+        url: GfkServer + '_extrec.aspx?pageid=clickerload',
+        //url: sessionStorage.getItem("urlConcat"),
         data: sessionStorage.getItem("result")
         //   url:"http://ecpo-descan-preprod.gfk.com/dynaload_extrec.aspx?pageid=clickerload",
         //   data: '<?xml version="1.0" encoding="iso-8859-1"?>\
@@ -151,35 +160,45 @@ export class TableComponent implements OnInit {
         //    </body>\
         //  </gfk_envelope>'
       },
+
         function printResult(result) {
+
           console.log(result);
-        });
+          if (result.endsWith("s_Extrec_ReceiveXML Code: 1")) {
+            document.getElementById("feedback").textContent = "Not good, did you just sent an empty data table ?";
+            document.getElementById("feedback").style.backgroundColor = "yellow";
+            document.getElementById("feedback").style.padding = "2%";
+            document.getElementById("feedback").style.paddingLeft = "0%";
+
+          }
+          if (result.endsWith("s_Extrec_ReceiveXML Code: 2")) {
+            document.getElementById("feedback").textContent = "Not good, Is the scanner binded with an individual ?";
+            document.getElementById("feedback").style.backgroundColor = "yellow";
+            document.getElementById("feedback").style.padding = "2%";
+            document.getElementById("feedback").style.paddingLeft = "0%";
+          }
+
+          if (result.match(1709)) {
+            this.ErrorCode1();
+
+          }
+        },
+
+      );
 
       // };
     })();
-    //     function loadProgress() {
-    // console.log(this.progressValue)
-    // // for (var i = 0; i<= 100; i++) 
-    // //   {
-    // //     console.log(this.progressValue);
-    // //     this.progressValue ++;
-    // //   }
-    //     }
-
-
-
-    
-    //     loadProgress();
-   
-    
   }
 
+
+
   // login to ECPO portal
-  
+
   login() {
     var ScannerID: any = this.DataService.transferdata();
     ScannerID = ScannerID.scannerId;
-    console.log("ScannerId Login: ", ScannerID.scannerId);
+    var GfkServer: any = this.DataService.transferdataServer();
+
     var Checksum = 0;
     for (var i = 1; i <= ScannerID.length; i++) {
       Checksum = Checksum + (i * (ScannerID.charCodeAt(i - 1)) * (ScannerID.charCodeAt(i - 1)) * (ScannerID.charCodeAt(i - 1)));
@@ -188,16 +207,23 @@ export class TableComponent implements OnInit {
     var ChecksumStr = "000000".concat(Checksum.toString());
     ChecksumStr = ChecksumStr.slice(ChecksumStr.length - 6);
     var Result = ScannerID + ChecksumStr;
-    console.log(ScannerID, ChecksumStr)
+    console.log("Scanner Login id: ", ScannerID, "\n The CheckSum Result: ", ChecksumStr)
+    console.log(GfkServer);
     // console.log("Checksum:" + ChecksumStr);
     // console.log("Concatenation " + Result);
     // console.log("Your full login served" + " http://ecpo-descan-preprod.gfk.com/dynaLoad.aspx?pageid=clickerlogin&deviceid="+ Result);
-    var win = window.open(" http://ecpo-descan-preprod.gfk.com/dynaLoad.aspx?pageid=clickerlogin&deviceid=" + Result, '_blank');
+    var win = window.open(GfkServer + ".aspx?pageid=clickerlogin&deviceid=" + Result, '_blank');
     win.focus();
   }
+  ErrorCode1() {
+    document.getElementById("feedback").textContent = " SUCCESS !";
+    document.getElementById("feedback").style.backgroundColor = "green";
+    document.getElementById("feedback").style.padding = "2%";
+    document.getElementById("feedback").style.paddingLeft = "34%";
+
+  }
+
   ngOnInit() {
-    console.log("progress")
-    console.log(this.progressValue)
 
   }
 }

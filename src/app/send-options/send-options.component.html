@@ -1,12 +1,5 @@
-<!-- <md-select overlayDir required placeholder="Action"  class="menubutton" [(ngModel)]="selectedValue" >
-        
-                <md-option *ngFor="let DunamisUrlPage of DunamisUrlPages" [value]="DunamisUrlPage.value">
-                  {{ DunamisUrlPage.viewValue }}
-                </md-option>
-              </md-select> -->
-
 <!-- chips -->
-
+<br>
 <md-chip-list>
   <md-chip color="accent" selected="true">Options</md-chip>
 </md-chip-list>
@@ -14,33 +7,28 @@
 
 <!-- forms -->
 
-<form #f= "ngForm" (input)="oninput(f)" >
-    <md-form-field class="example-full-width">
-      <input name="scannerId" ngModel required #scannerId="ngModel" mdInput placeholder="ScannerId" value="000000000P602395">
-    </md-form-field>
-    <!-- <button md-button >Submit</button> -->
-  </form>
+<form #f="ngForm" (input)="oninput(f)">
+  <md-form-field class="example-full-width">
+    <input name="scannerId" ngModel required #scannerId="ngModel" mdInput placeholder="ScannerId" value="000000000P602395">
+  </md-form-field>
+  <!-- <button md-button >Submit</button> -->
+</form>
 
 <!-- form for server slection -->
 
-  <form  >
-  <md-select   placeholder="GFK Server" item-width="40%" width='300px'>
-      <md-option (click)="onSubmit(food.value)"*ngFor="let food of GFK_Server" [value]="food.value">
-        {{ food.viewValue }}
-      </md-option>
-    </md-select>
-  </form>
+<form>
+  <md-select placeholder="GFK Server" item-width="40%" width='300px'>
+    <md-option (click)="onSubmit(food.value)" *ngFor="let food of GFK_Server" [value]="food.value">
+      {{ food.viewValue }}
+    </md-option>
+  </md-select>
+</form>
 
 <!--  -->
-    <br>
-    <br>
+<br>
+<br>
 
-<md-chip-list>
-  <md-chip color="warn" selected="true">Build Bugs</md-chip>
-</md-chip-list>
 
-<ul>
-  <li>Bugs to be addresed in next build.</li>
-  <li>Gfk Server selection does not work yet, will send barcodes to descan-preprod only</li>
-  <li>Login to platform button will be available in next build</li>
-</ul>
+
+
+
