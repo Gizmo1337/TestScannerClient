@@ -7,20 +7,16 @@ import { DataService } from '../data.service'
   styleUrls: ['./table.component.css']
 })
 export class TableComponent implements OnInit {
+  //variables for data manipulation
   server: string = "";
   urlConcat: string = "http://ecpo-descan-preprod.gfk.com/dynaload_extrec.aspx?pageid=clickerload"
-  //
-  //dynaLoad.aspx?pageid=clickerlogin&deviceid=
-  //
-
-
-  //variable for table data-manipulation
-  public SuccessCount: number = 0;
   ScannerId: object;
+
   instance: string = "hotInstance";
   coordX: string;
   coordY: string;
   data: any[];
+
   //variables for progress bar
   color = 'primary';
   mode = 'query';
@@ -118,24 +114,7 @@ export class TableComponent implements OnInit {
     var GfkServer: any = this.DataService.transferdataServer();
     var cors_api_url = 'https://cors-anywhere.herokuapp.com/';
     function doCORSRequest(options, printResult) {
-      var x = new XMLHttpRequest();
-
-      x.open(options.method, cors_api_url + options.url);
-      x.onload = x.onerror = function () {
-        printResult(
-          options.method + ' ' + options.url + '\n' +
-          "status:" + x.status + ' ' + x.statusText + '\n\n' +
-          (x.responseText || '')
-        );
-
-      };
-      if (/^POST/i.test(options.method)) {
-        x.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-      }
-      x.send(options.data);
-      if (x.status == 200) {
-        console.log("EVERYTHINS IS AWESOME")
-      }
+      HttpPost(options, cors_api_url, printResult);
     }
     // Bind event
     (function () {
@@ -162,38 +141,24 @@ export class TableComponent implements OnInit {
       },
 
         function printResult(result) {
-
           console.log(result);
           if (result.endsWith("s_Extrec_ReceiveXML Code: 1")) {
-            document.getElementById("feedback").textContent = "Not good, did you just sent an empty data table ?";
-            document.getElementById("feedback").style.backgroundColor = "yellow";
-            document.getElementById("feedback").style.padding = "2%";
-            document.getElementById("feedback").style.paddingLeft = "0%";
-
+              ErrorCode1();
           }
           if (result.endsWith("s_Extrec_ReceiveXML Code: 2")) {
-            document.getElementById("feedback").textContent = "Not good, Is the scanner binded with an individual ?";
-            document.getElementById("feedback").style.backgroundColor = "yellow";
-            document.getElementById("feedback").style.padding = "2%";
-            document.getElementById("feedback").style.paddingLeft = "0%";
+              ErrorCode2();
           }
-
           if (result.match(1709)) {
-            this.ErrorCode1();
-
+              SuccessFeedback();
           }
         },
 
       );
-
       // };
     })();
   }
 
-
-
   // login to ECPO portal
-
   login() {
     var ScannerID: any = this.DataService.transferdata();
     ScannerID = ScannerID.scannerId;
@@ -215,16 +180,77 @@ export class TableComponent implements OnInit {
     var win = window.open(GfkServer + ".aspx?pageid=clickerlogin&deviceid=" + Result, '_blank');
     win.focus();
   }
-  ErrorCode1() {
-    document.getElementById("feedback").textContent = " SUCCESS !";
-    document.getElementById("feedback").style.backgroundColor = "green";
-    document.getElementById("feedback").style.padding = "2%";
-    document.getElementById("feedback").style.paddingLeft = "34%";
-
-  }
-
-  ngOnInit() {
-
-  }
+  ngOnInit() {}
 }
 
+function HttpPost(options: any, cors_api_url: string, printResult: any) {
+    var x = new XMLHttpRequest();
+    x.open(options.method, cors_api_url + options.url);
+    x.onload = x.onerror = function() {
+    printResult(options.method + ' ' + options.url + '\n' +
+    "status:" + x.status + ' ' + x.statusText + '\n\n' +
+(x.responseText || ''));
+};
+    if(/^POST/i.test(options.method)) {
+    x.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+}
+    x.send(options.data);
+    sessionStorage.removeItem("result")
+
+}
+
+function SuccessFeedback() {
+    logSuccess();
+    
+}
+
+function ErrorCode2() {
+  logBindError();
+ 
+}
+
+function ErrorCode1() {
+    logEmptyTable();
+}
+
+
+var log = "";
+
+function logSuccess(){
+  var currentdate = new Date(); 
+  var datetime =    currentdate.getDate() + "/"
+                  + (currentdate.getMonth()+1)  + "/" 
+                  + currentdate.getFullYear() + " @ "  
+                  + currentdate.getHours() + ":"  
+                  + currentdate.getMinutes() + ":" 
+                  + currentdate.getSeconds() + "-> BarCodes successfully sent !";
+
+  log = datetime + "<br>" + log;
+document.getElementById("console").innerHTML= log;               
+}
+
+function logEmptyTable(){
+  var currentdate = new Date(); 
+  var datetime =    currentdate.getDate() + "/"
+                  + (currentdate.getMonth()+1)  + "/" 
+                  + currentdate.getFullYear() + " @ "  
+                  + currentdate.getHours() + ":"  
+                  + currentdate.getMinutes() + ":" 
+                  + currentdate.getSeconds() + "-> Not good, did you just sent an empty data table ?";
+
+  log = datetime + "<br>" + log;
+document.getElementById("console").innerHTML= log;               
+}
+
+function logBindError(){
+  var currentdate = new Date(); 
+  var datetime =    currentdate.getDate() + "/"
+                  + (currentdate.getMonth()+1)  + "/" 
+                  + currentdate.getFullYear() + " @ "  
+                  + currentdate.getHours() + ":"  
+                  + currentdate.getMinutes() + ":" 
+                  + currentdate.getSeconds() + "-> Not good, Is the scanner BINDED with an individual ?";
+
+  log = datetime + "<br>" + log;
+document.getElementById("console").innerHTML= log;               
+}

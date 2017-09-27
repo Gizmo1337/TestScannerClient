@@ -11,7 +11,7 @@
 }
 .progress-bar {
     
-    width: 450px;
+    width: 457px;
 }
 
 .feedback {
@@ -19,5 +19,6 @@
     font-size: 1.2em;
     font-weight: 900; 
     vertical-align: middle;
- 
-}
+    background-color: white;
+
+} 

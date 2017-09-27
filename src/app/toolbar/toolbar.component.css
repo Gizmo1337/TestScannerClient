@@ -2,5 +2,18 @@
   
   .example-spacer {
     flex: 1 1 auto;
+    vertical-align:middle;
+    padding: 0;
+   
   }
+
+.toolbar {
+  height: calc(100% - 64px);
+  overflow: auto;
+  position: relative;
+  z-index: 2;
+}
   
+.menubutton {
+
+}
