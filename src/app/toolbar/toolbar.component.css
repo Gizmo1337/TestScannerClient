@@ -7,12 +7,7 @@
    
   }
 
-.toolbar {
-  height: calc(100% - 64px);
-  overflow: auto;
-  position: relative;
-  z-index: 2;
-}
+
   
 .menubutton {
 

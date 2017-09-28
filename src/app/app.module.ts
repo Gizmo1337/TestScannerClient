@@ -26,6 +26,7 @@ import {MdProgressBarModule} from '@angular/material';
     SendOptionsComponent
   ],
   imports: [
+
     MdProgressBarModule,
     MdInputModule,
     MdChipsModule,

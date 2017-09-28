@@ -1,33 +1,41 @@
 <!-- chips -->
-<br>
-<md-chip-list>
-  <md-chip color="accent" selected="true">Options</md-chip>
-</md-chip-list>
-<br>
+
+
+<md-card class="options">
+    <md-card-header>
+        <md-card-title>Options</md-card-title>
+        <md-card-subtitle>Fill in all fields !</md-card-subtitle>
+    </md-card-header>
+  
+    <md-card-content>
+        <form #f="ngForm" (input)="oninput(f)">
+            <md-form-field class="example-full-width">
+              <input  name="scannerId" ngModel required #scannerId="ngModel" mdInput placeholder="ScannerId">
+            </md-form-field>
+            <!-- <button md-button >Submit</button> -->
+          </form>
+          
+          <!-- form for server slection -->
+          
+          <form >
+            <md-select  placeholder="GFK Server" item-width="40%" width='300px'>
+              <md-option (click)="onSubmit(food.value)" *ngFor="let food of GFK_Server" [value]="food.value">
+                {{ food.viewValue }}
+              </md-option>
+            </md-select>
+          </form>
+
+
+
+    </md-card-content>
+
+   
 
 <!-- forms -->
 
-<form #f="ngForm" (input)="oninput(f)">
-  <md-form-field class="example-full-width">
-    <input name="scannerId" ngModel required #scannerId="ngModel" mdInput placeholder="ScannerId" value="000000000P602395">
-  </md-form-field>
-  <!-- <button md-button >Submit</button> -->
-</form>
 
-<!-- form for server slection -->
 
-<form>
-  <md-select placeholder="GFK Server" item-width="40%" width='300px'>
-    <md-option (click)="onSubmit(food.value)" *ngFor="let food of GFK_Server" [value]="food.value">
-      {{ food.viewValue }}
-    </md-option>
-  </md-select>
-</form>
-
-<!--  -->
-<br>
-<br>
-
+</md-card>
 
 
 
